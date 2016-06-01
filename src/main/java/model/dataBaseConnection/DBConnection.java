@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 public class DBConnection {
     
     //JDBC 
-    private static String driver = "com.mysql.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost:3306/";
-    private static String dbuser = "root";
-    private static String dbpass ="m3630804";
-    private static String dbname ="elmoez";
-    private static Statement st;
+//    private static String driver = "com.mysql.jdbc.Driver";
+//    private static String url = "jdbc:mysql://localhost:3306/";
+//    private static String dbuser = "root";
+//    private static String dbpass ="m3630804";
+//    private static String dbname ="elmoez";
+//    private static Statement st;
     
     
     //hibrnet
@@ -72,17 +72,17 @@ public class DBConnection {
         
     }
     //uesing jdbc
-    public static Statement getStatement(){
-        try{
-                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-                Connection con = DriverManager.getConnection(url+dbname, dbuser, dbpass);
-                st = con.createStatement();
-        
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
-        return st;  
-    }
+//    public static Statement getStatement(){
+//        try{
+//                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+//                Connection con = DriverManager.getConnection(url+dbname, dbuser, dbpass);
+//                st = con.createStatement();
+//        
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//        
+//        return st;  
+//    }
     
 }
