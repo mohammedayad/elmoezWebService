@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-May-2016 22:35:22 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.pojos.MonumentsInformation" table="monuments_information" catalog="elmoez" optimistic-lock="version">
+        <composite-id name="id" class="model.pojos.MonumentsInformationId">
+            <key-property name="monumentsId" type="int">
+                <column name="monuments_id" />
+            </key-property>
+            <key-property name="pieceName" type="string">
+                <column name="piece_name" length="45" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="elmoezMonuments" class="model.pojos.ElmoezMonuments" update="false" insert="false" fetch="select">
+            <column name="monuments_id" not-null="true" />
+        </many-to-one>
+        <property name="pieceInformation" type="string">
+            <column name="piece_information" length="500" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

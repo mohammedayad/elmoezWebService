@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-May-2016 22:35:22 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.pojos.Feeds" table="feeds" catalog="elmoez" optimistic-lock="version">
+        <id name="feedsId" type="java.lang.Integer">
+            <column name="feeds_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="userProfile" class="model.pojos.UserProfile" fetch="select">
+            <column name="user_id" not-null="true" />
+        </many-to-one>
+        <property name="feed" type="string">
+            <column name="feed" length="500" not-null="true" />
+        </property>
+        <property name="image" type="string">
+            <column name="image" length="50" not-null="true" />
+        </property>
+        <property name="feedTime" type="timestamp">
+            <column name="feed_time" length="19" not-null="true" />
+        </property>
+        <property name="likeFeed" type="int">
+            <column name="like_feed" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
