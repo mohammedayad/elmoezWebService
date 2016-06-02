@@ -41,7 +41,7 @@ public class DBConnection {
         if(sessionFactory==null){
             synchronized (SessionFactory.class){
                 if(sessionFactory==null){
-                    sessionFactory=new Configuration().configure("hibernetConfigrations/hibernate.cfg.xml").buildSessionFactory();
+                    sessionFactory=new Configuration().configure().buildSessionFactory();
                 
                 
                 }
@@ -59,7 +59,7 @@ public class DBConnection {
     }//end of singlton instance
   
     //uesing hibrnet
-    public static Session getConnection(){
+    public static Session getSession(){
 //        SessionFactory sessionFactory=new Configuration().configure("hibernetConfigrations/hibernate.cfg.xml").buildSessionFactory();
 //        Session session=sessionFactory.openSession();
 //        return session;

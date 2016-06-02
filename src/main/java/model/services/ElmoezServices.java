@@ -13,6 +13,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.daos.UserProfileDao;
+import model.pojos.UserProfile;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -26,6 +28,14 @@ public class ElmoezServices {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/testService")
     public String testService() {
+        
+            UserProfile newUser=new UserProfile();
+            newUser.setFirstName("firstName");
+            newUser.setLastName("lastName");
+            newUser.setEmail("email");
+            newUser.setPassword("password");
+            newUser.setUserImage("image");
+            UserProfileDao.register(newUser);
        
         return "{\"museum\":\"elmoez street\"}";
     }
@@ -40,16 +50,29 @@ public class ElmoezServices {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/signUp")
     public String signUp(String user) {
-        System.out.println("user added");
+        
+        boolean signUpState=false;
+        
         System.out.println(user.toString());
         try {
+            
+            
             JSONObject json=new JSONObject(user);
-            System.out.println(json.get("userName"));
+            UserProfile newUser=new UserProfile();
+            newUser.setFirstName((String) json.get("firstName"));
+            newUser.setLastName((String) json.get("lastName"));
+            newUser.setEmail((String) json.get("email"));
+            newUser.setPassword((String) json.get("password"));
+            newUser.setUserImage((String) json.get("image"));
+            signUpState=UserProfileDao.register(newUser);
+            
+            
         } catch (JSONException ex) {
             Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-        return "{\"museum\":\"elmoez street\"}";
+        
+       System.out.println("new user added");
+        return "{\"state\":\""+signUpState+"\"}";
     }
     
     
