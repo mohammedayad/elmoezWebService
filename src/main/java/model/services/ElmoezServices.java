@@ -63,16 +63,24 @@ public class ElmoezServices {
             newUser.setLastName((String) json.get("lastName"));
             newUser.setEmail((String) json.get("email"));
             newUser.setPassword((String) json.get("password"));
-            newUser.setUserImage((String) json.get("image"));
+            newUser.setUserImage("default.jpg");
             signUpState=UserProfileDao.register(newUser);
-            
+            System.out.println("new user added");
             
         } catch (JSONException ex) {
             Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
+            signUpState=false;
+            
         }
-        
-       System.out.println("new user added");
-        return "{\"state\":\""+signUpState+"\"}";
+        System.out.println("state "+signUpState);
+       
+       if(signUpState){
+           return "{\"state\":\"registeredSuccessfully\"}";
+       
+       }else{
+        return "{\"state\":\"registeredFailed\"}";
+    
+       }
     }
     
     
