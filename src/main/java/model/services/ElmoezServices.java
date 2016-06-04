@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.daos.UserProfileDao;
@@ -51,7 +52,8 @@ public class ElmoezServices {
     @Path("/signUp")
     public String signUp(String user) {
         
-        boolean signUpState=false;
+        boolean signUpFlag=false;
+        String signUpState="";
         
         System.out.println(user.toString());
         try {
@@ -64,23 +66,41 @@ public class ElmoezServices {
             newUser.setEmail((String) json.get("email"));
             newUser.setPassword((String) json.get("password"));
             newUser.setUserImage("default.jpg");
-            signUpState=UserProfileDao.register(newUser);
+            signUpFlag=UserProfileDao.register(newUser);
             System.out.println("new user added");
+            if(signUpFlag){
+                signUpState="registeredSuccessfully";
+                
+       
+            }else{
+                signUpState="registeredFailed";
+    
+       }
             
         } catch (JSONException ex) {
             Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
-            signUpState=false;
+            
             
         }
         System.out.println("state "+signUpState);
+        return "{\"state\":\""+signUpState+"\"}";
        
-       if(signUpState){
-           return "{\"state\":\"registeredSuccessfully\"}";
        
-       }else{
-        return "{\"state\":\"registeredFailed\"}";
+    }
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/logIn/{mail}/{pass}")
     
-       }
+    public String logIn(@PathParam(value = "mail") String userMail,@PathParam(value = "pass") String userPass){
+//        System.out.println("mail "+userMail+" pass "+userPass);
+          UserProfile existUser=new UserProfile();
+          existUser.setEmail(userMail);
+          existUser.setPassword(userPass);
+          String userState=UserProfileDao.checkLogin(existUser);
+        
+        return "{\"state\":\""+userState+"\"}";
+        
     }
     
     
