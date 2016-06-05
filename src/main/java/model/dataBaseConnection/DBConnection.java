@@ -37,7 +37,7 @@ public class DBConnection {
      * hibrnet singlton design pattern for session factory
      * @return 
      */
-    public static SessionFactory getInstance(){
+    private static SessionFactory getInstance(){
         if(sessionFactory==null){
             synchronized (SessionFactory.class){
                 if(sessionFactory==null){
