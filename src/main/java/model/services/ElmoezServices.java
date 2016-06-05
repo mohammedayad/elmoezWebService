@@ -5,6 +5,9 @@
  */
 package model.services;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -13,7 +16,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.daos.FeedsDao;
 import model.daos.UserProfileDao;
+import model.dtos.FeedsDto;
+import model.pojos.Feeds;
 import model.pojos.UserProfile;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -81,6 +87,38 @@ public class ElmoezServices {
         return "{\"state\":\"registeredFailed\"}";
     
        }
+    }
+    
+    /**
+     * shereen
+     * feeds from user
+     */
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/feeds")
+    public String getArrayOfFeeds(){
+        
+        List<Feeds> feeds=FeedsDao.getAllFeeds();
+        List<FeedsDto> usersFeeds=new ArrayList<FeedsDto>();
+        for (int i = 0; i < feeds.size(); i++) {
+            FeedsDto feed=new FeedsDto();
+            feed.setUserName(feeds.get(i).getUserProfile().getFirstName());
+            feed.setUserImage(feeds.get(i).getUserProfile().getUserImage());
+            feed.setFeed(feeds.get(i).getFeed());
+            feed.setImage(feeds.get(i).getImage());
+            feed.setFeedTime(feeds.get(i).getFeedTime());
+            feed.setLikeFeed(feeds.get(i).getLikeFeed());
+            usersFeeds.add(feed);
+            
+            
+            
+            
+        }
+        //System.out.println(feeds.get(0).getUserProfile().getFirstName());
+        return usersFeeds.toString();
+          
     }
     
     
