@@ -114,4 +114,46 @@ public class UserProfileDao {
         return true;
 
     }
+
+    
+    /**
+     * nour
+     * check if this mail and pass is exist or not
+     */
+    public static String checkLogin(UserProfile existUser){
+        Session session=DBConnection.getSession();
+        session.beginTransaction();
+        String loginFlag="";
+        String hqlQuery="select password from UserProfile where email=:x";
+        Query query = session.createQuery(hqlQuery).setString("x", existUser.getEmail());
+        
+        String correctPass=(String) query.uniqueResult();
+        session.getTransaction().commit();
+        
+        if(correctPass!=null){//if user register with correct mail
+            if(correctPass.equals(existUser.getPassword()))//if user register with correct password
+            {
+                loginFlag="register Successfully";
+            
+            }else{
+                loginFlag="incorrect password";
+            
+            
+            }
+        
+        
+        }else{
+            loginFlag="email is not exist";
+        
+        
+        }
+        
+//        System.out.println("pass "+query.uniqueResult());
+        
+        
+        return loginFlag;
+        
+    }
+    
+
 }

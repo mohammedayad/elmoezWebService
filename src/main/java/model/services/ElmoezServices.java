@@ -5,15 +5,22 @@
  */
 package model.services;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.daos.FeedsDao;
 import model.daos.UserProfileDao;
+import model.dtos.FeedsDto;
+import model.pojos.Feeds;
 import model.pojos.UserProfile;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -44,14 +51,18 @@ public class ElmoezServices {
     /**
      * ayad sign up take json object of user
      */
+    
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/signUp")
     public String signUp(String user) {
-
         boolean signUpState = false;
 
+        
+        boolean signUpFlag=false;
+//        String signUpState="";
+        
         System.out.println(user.toString());
         try {
 
@@ -62,14 +73,22 @@ public class ElmoezServices {
             newUser.setEmail((String) json.get("email"));
             newUser.setPassword((String) json.get("password"));
             newUser.setUserImage("default.jpg");
-            signUpState = UserProfileDao.register(newUser);
+//            signUpState = UserProfileDao.register(newUser);
+            signUpFlag=UserProfileDao.register(newUser);
             System.out.println("new user added");
 
+            if(signUpFlag){
+//                signUpState="registeredSuccessfully";
+                
+       
+            }else{
+//                signUpState="registeredFailed";
+    
+       }
         } catch (JSONException ex) {
             Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
             signUpState = false;
 
-        }
         System.out.println("state " + signUpState);
 
         if (signUpState) {
@@ -79,6 +98,82 @@ public class ElmoezServices {
             return "{\"state\":\"registeredFailed\"}";
 
         }
+        }
+        System.out.println("state "+signUpState);
+        return "{\"state\":\""+signUpState+"\"}";
+       
+       
+    }
+
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/logIn/{mail}/{pass}")
+    
+    public String logIn(@PathParam(value = "mail") String userMail,@PathParam(value = "pass") String userPass){
+//        System.out.println("mail "+userMail+" pass "+userPass);
+          UserProfile existUser=new UserProfile();
+          existUser.setEmail(userMail);
+          existUser.setPassword(userPass);
+          String userState=UserProfileDao.checkLogin(existUser);
+        
+        return "{\"state\":\""+userState+"\"}";
+        
+    }
+    
+    /**
+     * shereen
+     * feeds from user
+     */
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/feeds")
+    public String getArrayOfFeeds(){
+        
+        List<Feeds> feeds=FeedsDao.getAllFeeds();
+        List<FeedsDto> usersFeeds=new ArrayList<FeedsDto>();
+        for (int i = 0; i < feeds.size(); i++) {
+            FeedsDto feed=new FeedsDto();
+            feed.setUserName(feeds.get(i).getUserProfile().getFirstName());
+            feed.setUserImage(feeds.get(i).getUserProfile().getUserImage());
+            feed.setFeed(feeds.get(i).getFeed());
+            feed.setImage(feeds.get(i).getImage());
+            feed.setFeedTime(feeds.get(i).getFeedTime());
+            feed.setLikeFeed(feeds.get(i).getLikeFeed());
+            usersFeeds.add(feed);
+            
+            
+            
+            
+        }
+        //System.out.println(feeds.get(0).getUserProfile().getFirstName());
+        return usersFeeds.toString();
+          
     }
 
     @POST
@@ -130,3 +225,4 @@ public class ElmoezServices {
     }
 
 }
+
