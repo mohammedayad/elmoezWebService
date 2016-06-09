@@ -144,7 +144,11 @@ public class ElmoezServices {
 
     }
 
-    
+   /**
+     * Christina Dawoud
+     * change the user name
+     * take json object of user name and email
+     */ 
    
     @POST
     @Path("/username")
@@ -171,6 +175,11 @@ public class ElmoezServices {
         return "{\"state\":\""+editNameState+"\"}";
 
     }
+    /**
+     * Christina Dawoud
+     * change password
+     * take json object of user password and email 
+     */
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
