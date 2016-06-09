@@ -108,6 +108,7 @@ public class ElmoezServices {
         
         return "{\"state\":\""+userState+"\"}";
         
+
     }
     
     /**
@@ -140,7 +141,9 @@ public class ElmoezServices {
         //System.out.println(feeds.get(0).getUserProfile().getFirstName());
         return usersFeeds.toString();
           
+
     }
+    
     
         
     
