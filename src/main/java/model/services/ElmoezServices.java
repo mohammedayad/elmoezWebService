@@ -143,60 +143,9 @@ public class ElmoezServices {
           
 
     }
-    
-    
-        
-    
-    
-    
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/logIn/{mail}/{pass}")
-    
-    public String logIn(@PathParam(value = "mail") String userMail,@PathParam(value = "pass") String userPass){
-//        System.out.println("mail "+userMail+" pass "+userPass);
-          UserProfile existUser=new UserProfile();
-          existUser.setEmail(userMail);
-          existUser.setPassword(userPass);
-          String userState=UserProfileDao.checkLogin(existUser);
-        
-        return "{\"state\":\""+userState+"\"}";
-        
-    }
-    
-    /**
-     * shereen
-     * feeds from user
-     */
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/feeds")
-    public String getArrayOfFeeds(){
-        
-        List<Feeds> feeds=FeedsDao.getAllFeeds();
-        List<FeedsDto> usersFeeds=new ArrayList<FeedsDto>();
-        for (int i = 0; i < feeds.size(); i++) {
-            FeedsDto feed=new FeedsDto();
-            feed.setUserName(feeds.get(i).getUserProfile().getFirstName());
-            feed.setUserImage(feeds.get(i).getUserProfile().getUserImage());
-            feed.setFeed(feeds.get(i).getFeed());
-            feed.setImage(feeds.get(i).getImage());
-            feed.setFeedTime(feeds.get(i).getFeedTime());
-            feed.setLikeFeed(feeds.get(i).getLikeFeed());
-            usersFeeds.add(feed);
-            
-            
-            
-            
-        }
-        //System.out.println(feeds.get(0).getUserProfile().getFirstName());
-        return usersFeeds.toString();
-          
-    }
 
+    
+   
     @POST
     @Path("/username")
     @Produces(MediaType.APPLICATION_JSON)
