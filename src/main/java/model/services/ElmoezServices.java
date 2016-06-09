@@ -48,83 +48,54 @@ public class ElmoezServices {
         return "{\"museum\":\"elmoez street\"}";
     }
 
-    /**
-     * ayad sign up take json object of user
+   /**
+     * ayad
+     * sign up 
+     * take json object of user
      */
-    
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/signUp")
     public String signUp(String user) {
-        boolean signUpState = false;
-
         
         boolean signUpFlag=false;
-//        String signUpState="";
+        String signUpState="";
         
         System.out.println(user.toString());
         try {
-
-            JSONObject json = new JSONObject(user);
-            UserProfile newUser = new UserProfile();
+            
+            
+            JSONObject json=new JSONObject(user);
+            UserProfile newUser=new UserProfile();
             newUser.setFirstName((String) json.get("firstName"));
             newUser.setLastName((String) json.get("lastName"));
             newUser.setEmail((String) json.get("email"));
             newUser.setPassword((String) json.get("password"));
             newUser.setUserImage("default.jpg");
-//            signUpState = UserProfileDao.register(newUser);
             signUpFlag=UserProfileDao.register(newUser);
             System.out.println("new user added");
-
             if(signUpFlag){
-//                signUpState="registeredSuccessfully";
+                signUpState="registeredSuccessfully";
                 
        
             }else{
-//                signUpState="registeredFailed";
+                signUpState="registeredFailed";
     
        }
+            
         } catch (JSONException ex) {
             Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
-            signUpState = false;
-
-        System.out.println("state " + signUpState);
-
-        if (signUpState) {
-            return "{\"state\":\"registeredSuccessfully\"}";
-
-        } else {
-            return "{\"state\":\"registeredFailed\"}";
-
-        }
+            
+            
         }
         System.out.println("state "+signUpState);
-        return "{\"state\":\""+signUpState+"\"}";
+        return "{\"state\""+signUpState+"\"}";
        
        
     }
-
+    
         
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
