@@ -94,6 +94,11 @@ public class ElmoezServices {
        
        
     }
+    /**
+     * nour
+     * log in 
+     * take json object of user and check it is correct log in or not
+     */
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
