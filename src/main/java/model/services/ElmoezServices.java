@@ -5,18 +5,28 @@
  */
 package model.services;
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import model.daos.FeedsDao;
 import model.daos.UserProfileDao;
 import model.dtos.FeedsDto;
@@ -31,6 +41,16 @@ import org.codehaus.jettison.json.JSONObject;
  */
 @Path("/elmoez")
 public class ElmoezServices {
+    @Context 
+    ServletContext context;
+
+    
+    public ElmoezServices(@Context ServletContext context) {
+    
+        this.context=context;
+    }
+    
+    
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -207,6 +227,60 @@ public class ElmoezServices {
         return "{\"state\":\""+editPasswordState+"\"}";
 
     }
+    
+    
+    /**
+     * Christina Dawoud
+     * change profile picture
+     */
+    
+    @POST
+	@Path("/image")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(
+			@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail,String email) {
+            
+      
+                String path=context.getRealPath("/images");
+                System.out.println(path+"\n");
+
+		String uploadedFileLocation = path+"\\"+ fileDetail.getFileName();
+
+                String ImageName=fileDetail.getFileName();
+		// save it
+		writeToFile(uploadedInputStream, uploadedFileLocation,email,ImageName);
+
+		String output = "File uploaded to : " + uploadedFileLocation;
+
+		return Response.status(200).entity(output).build();
+
+	}
+
+	// save uploaded file to new location
+	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email,String ImageName) {
+
+		try {
+			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+                        
+                                UserProfileDao.editProfilePicture(email,ImageName);
+                        
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
 
 }
 

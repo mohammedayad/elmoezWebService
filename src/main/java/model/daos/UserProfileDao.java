@@ -113,6 +113,27 @@ public class UserProfileDao {
         return true;
 
     }
+    
+     /**
+     * Christina 
+     *
+     * func to edit profile picture
+     */
+
+    public static boolean editProfilePicture(String email, String profilePicture) {
+        Session session = ProfileConnection.getSession();
+
+        String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
+        Query query = session.createQuery(hql);
+        query.setParameter("profilePicture", profilePicture);
+        query.setParameter("email", email);
+        int executeUpdate = query.executeUpdate();
+        session.beginTransaction();
+        session.getTransaction().commit();
+
+        return true;
+
+    }
 
     
 
