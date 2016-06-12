@@ -120,12 +120,12 @@ public class UserProfileDao {
      * func to edit profile picture
      */
 
-    public static boolean editProfilePicture(String email, String profilePicture) {
+    public static boolean editProfilePicture(String email) {
         Session session = ProfileConnection.getSession();
 
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
-        query.setParameter("profilePicture", profilePicture);
+        query.setParameter("profilePicture", email);
         query.setParameter("email", email);
         int executeUpdate = query.executeUpdate();
         session.beginTransaction();

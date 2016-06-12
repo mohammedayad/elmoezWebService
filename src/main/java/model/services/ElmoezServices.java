@@ -239,7 +239,7 @@ public class ElmoezServices {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
 			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail,String email) {
+			@FormDataParam("file") FormDataContentDisposition fileDetail,@FormDataParam("email") String email) {
             
       
                 String path=context.getRealPath("/images");
@@ -249,7 +249,7 @@ public class ElmoezServices {
 
                 String ImageName=fileDetail.getFileName();
 		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation,email,ImageName);
+		writeToFile(uploadedInputStream, uploadedFileLocation,email);
 
 		String output = "File uploaded to : " + uploadedFileLocation;
 
@@ -258,7 +258,7 @@ public class ElmoezServices {
 	}
 
 	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email,String ImageName) {
+	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email) {
 
 		try {
 			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
@@ -270,7 +270,7 @@ public class ElmoezServices {
 				out.write(bytes, 0, read);
 			}
                         
-                                UserProfileDao.editProfilePicture(email,ImageName);
+                                UserProfileDao.editProfilePicture(email);
                         
 			out.flush();
 			out.close();
