@@ -6,15 +6,7 @@
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/elmoez?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <!--<property name="hibernate.connection.password">1234</property>-->
-=======
-    <property name="hibernate.connection.password">1234</property>
->>>>>>> origin/master
-=======
-    <property name="hibernate.connection.password">1234</property>
->>>>>>> origin/master
     <mapping resource="model/pojos/MonumentsInformation.hbm.xml"/>
     <mapping resource="model/pojos/ElmoezMonuments.hbm.xml"/>
     <mapping resource="model/pojos/UserProfile.hbm.xml"/>
