@@ -57,13 +57,13 @@ public class ElmoezServices {
     @Path("/testService")
     public String testService() {
 
-        UserProfile newUser = new UserProfile();
-        newUser.setFirstName("firstName");
-        newUser.setLastName("lastName");
-        newUser.setEmail("email");
-        newUser.setPassword("password");
-        newUser.setUserImage("image");
-        UserProfileDao.register(newUser);
+//        UserProfile newUser = new UserProfile();
+//        newUser.setFirstName("firstName");
+//        newUser.setLastName("lastName");
+//        newUser.setEmail("email");
+//        newUser.setPassword("password");
+//        newUser.setUserImage("image");
+//        UserProfileDao.register(newUser);
 
         return "{\"museum\":\"elmoez street\"}";
     }
@@ -130,8 +130,9 @@ public class ElmoezServices {
           existUser.setEmail(userMail);
           existUser.setPassword(userPass);
           String userState=UserProfileDao.checkLogin(existUser);
+          
         
-        return "{\"state\":\""+userState+"\"}";
+        return userState;
         
 
     }
@@ -234,7 +235,7 @@ public class ElmoezServices {
      * change profile picture
      */
     
-    @POST
+        @POST
 	@Path("/image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
