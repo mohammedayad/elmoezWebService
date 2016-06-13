@@ -238,7 +238,7 @@ public class ElmoezServices {
         @POST
 	@Path("/image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
+	public Response uploadImage(
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail,@FormDataParam("email") String email) {
             
@@ -281,6 +281,40 @@ public class ElmoezServices {
 		}
 
 	}
+        
+        
+        
+    /**
+     * Christina Dawoud
+     * remove profile picture
+     */
+    
+        @POST
+	@Path("/removeimage")
+	@Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+	public String removeImage(String email) {
+            boolean removeImageState=false;
+      
+            System.out.println("\n\n\n  request comeeeeeeeeeee   \n\n\n");
+            try {
+            JSONObject json = new JSONObject(email);
+            String Email=(String) json.get("email");
+            
+            System.out.println("\n\n\n  Emailllllllllllllll"+Email+"  \n\n\n");
+            
+            
+            removeImageState= UserProfileDao.removeImage(Email);
+            
+            
+        } catch (JSONException ex) {
+
+            ex.printStackTrace();
+        }
+        return "{\"state\":\""+removeImageState+"\"}";
+
+	}
+
 
 
 }

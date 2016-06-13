@@ -146,6 +146,23 @@ public class UserProfileDao {
         return true;
 
     }
+
+    public static boolean removeImage(String email) {
+
+        Session session = ProfileConnection.getSession();
+
+        String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
+        Query query = session.createQuery(hql);
+        query.setParameter("profilePicture", "default");
+        query.setParameter("email", email);
+        int executeUpdate = query.executeUpdate();
+        session.beginTransaction();
+        session.getTransaction().commit();
+
+        return true;
+
+
+    }
     
 
     
