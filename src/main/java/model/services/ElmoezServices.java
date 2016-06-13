@@ -234,7 +234,7 @@ public class ElmoezServices {
      * change profile picture
      */
     
-    @POST
+        @POST
 	@Path("/image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
