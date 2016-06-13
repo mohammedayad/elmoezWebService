@@ -57,13 +57,13 @@ public class ElmoezServices {
     @Path("/testService")
     public String testService() {
 
-        UserProfile newUser = new UserProfile();
-        newUser.setFirstName("firstName");
-        newUser.setLastName("lastName");
-        newUser.setEmail("email");
-        newUser.setPassword("password");
-        newUser.setUserImage("image");
-        UserProfileDao.register(newUser);
+//        UserProfile newUser = new UserProfile();
+//        newUser.setFirstName("firstName");
+//        newUser.setLastName("lastName");
+//        newUser.setEmail("email");
+//        newUser.setPassword("password");
+//        newUser.setUserImage("image");
+//        UserProfileDao.register(newUser);
 
         return "{\"museum\":\"elmoez street\"}";
     }
@@ -130,8 +130,9 @@ public class ElmoezServices {
           existUser.setEmail(userMail);
           existUser.setPassword(userPass);
           String userState=UserProfileDao.checkLogin(existUser);
+          
         
-        return "{\"state\":\""+userState+"\"}";
+        return userState;
         
 
     }
@@ -237,9 +238,9 @@ public class ElmoezServices {
         @POST
 	@Path("/image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
+	public Response uploadImage(
 			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail,String email) {
+			@FormDataParam("file") FormDataContentDisposition fileDetail,@FormDataParam("email") String email) {
             
       
                 String path=context.getRealPath("/images");
@@ -249,7 +250,7 @@ public class ElmoezServices {
 
                 String ImageName=fileDetail.getFileName();
 		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation,email,ImageName);
+		writeToFile(uploadedInputStream, uploadedFileLocation,email);
 
 		String output = "File uploaded to : " + uploadedFileLocation;
 
@@ -258,7 +259,7 @@ public class ElmoezServices {
 	}
 
 	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email,String ImageName) {
+	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email) {
 
 		try {
 			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
@@ -270,7 +271,7 @@ public class ElmoezServices {
 				out.write(bytes, 0, read);
 			}
                         
-                                UserProfileDao.editProfilePicture(email,ImageName);
+                                UserProfileDao.editProfilePicture(email);
                         
 			out.flush();
 			out.close();
@@ -280,6 +281,40 @@ public class ElmoezServices {
 		}
 
 	}
+        
+        
+        
+    /**
+     * Christina Dawoud
+     * remove profile picture
+     */
+    
+        @POST
+	@Path("/removeimage")
+	@Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+	public String removeImage(String email) {
+            boolean removeImageState=false;
+      
+            System.out.println("\n\n\n  request comeeeeeeeeeee   \n\n\n");
+            try {
+            JSONObject json = new JSONObject(email);
+            String Email=(String) json.get("email");
+            
+            System.out.println("\n\n\n  Emailllllllllllllll"+Email+"  \n\n\n");
+            
+            
+            removeImageState= UserProfileDao.removeImage(Email);
+            
+            
+        } catch (JSONException ex) {
+
+            ex.printStackTrace();
+        }
+        return "{\"state\":\""+removeImageState+"\"}";
+
+	}
+
 
 
 }

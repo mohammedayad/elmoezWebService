@@ -5,6 +5,7 @@
  */
 package model.daos;
 
+import java.util.List;
 import model.dataBaseConnection.DBConnection;
 import model.pojos.UserProfile;
 import org.hibernate.Query;
@@ -42,26 +43,37 @@ public class UserProfileDao {
         Session session=DBConnection.getSession();
         session.beginTransaction();
         String loginFlag="";
-        String hqlQuery="select password from UserProfile where email=:x";
+        String correctPass="";
+        String userName="";
+        String hqlQuery="select password,firstName,lastName from UserProfile where email=:x";
         Query query = session.createQuery(hqlQuery).setString("x", existUser.getEmail());
         
-        String correctPass=(String) query.uniqueResult();
+//        String correctPass=(String) query.uniqueResult();
+        List<Object[]> users= (List<Object[]>)query.list();
+        
+        
         session.getTransaction().commit();
         
-        if(correctPass!=null){//if user register with correct mail
+        if(users.size()>0){//if user register with correct mail
+            for(Object[] user: users){
+                correctPass = (String)user[0];
+                userName=(String)user[1]+" "+(String)user[2];
+         
+         
+            }
             if(correctPass.equals(existUser.getPassword()))//if user register with correct password
             {
-                loginFlag="register Successfully";
+                loginFlag="{\"state\":\"register Successfully\",\"userName\":\""+userName+"\"}";
             
             }else{
-                loginFlag="incorrect password";
+                loginFlag="{\"state\":\"incorrect password\"}";
             
             
             }
         
         
         }else{
-            loginFlag="email is not exist";
+            loginFlag="{\"state\":\"email is not exist\"}";
         
         
         }
@@ -120,12 +132,12 @@ public class UserProfileDao {
      * func to edit profile picture
      */
 
-    public static boolean editProfilePicture(String email, String profilePicture) {
+    public static boolean editProfilePicture(String email) {
         Session session = ProfileConnection.getSession();
 
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
-        query.setParameter("profilePicture", profilePicture);
+        query.setParameter("profilePicture", email);
         query.setParameter("email", email);
         int executeUpdate = query.executeUpdate();
         session.beginTransaction();
@@ -134,6 +146,24 @@ public class UserProfileDao {
         return true;
 
     }
+
+    public static boolean removeImage(String email) {
+
+        Session session = ProfileConnection.getSession();
+
+        String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
+        Query query = session.createQuery(hql);
+        query.setParameter("profilePicture", "default");
+        query.setParameter("email", email);
+        int executeUpdate = query.executeUpdate();
+        session.beginTransaction();
+        session.getTransaction().commit();
+
+        return true;
+
+
+    }
+    
 
     
 
