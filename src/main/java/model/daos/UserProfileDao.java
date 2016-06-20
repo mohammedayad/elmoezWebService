@@ -134,7 +134,7 @@ public class UserProfileDao {
 
 
     public static boolean editProfilePicture(String email,String ImageName) {
-        Session session = ProfileConnection.getSession();
+        Session session = DBConnection.getSession();
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
         query.setParameter("profilePicture", ImageName);
