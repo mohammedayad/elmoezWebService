@@ -244,22 +244,24 @@ public class ElmoezServices {
             
       
                 String path=context.getRealPath("/images");
+                
                 System.out.println(path+"\n");
 
 		String uploadedFileLocation = path+"\\"+ fileDetail.getFileName();
-
+                
                 String ImageName=fileDetail.getFileName();
 		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation,email);
+		writeToFile(uploadedInputStream, uploadedFileLocation,email,ImageName);
 
 		String output = "File uploaded to : " + uploadedFileLocation;
-
+                System.out.println("output is "+output);
+                System.out.println("image name "+ImageName);
 		return Response.status(200).entity(output).build();
 
 	}
 
 	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email) {
+	private void writeToFile(InputStream uploadedInputStream,String uploadedFileLocation,String email,String ImageName) {
 
 		try {
 			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
@@ -271,7 +273,7 @@ public class ElmoezServices {
 				out.write(bytes, 0, read);
 			}
                         
-                                UserProfileDao.editProfilePicture(email);
+                                UserProfileDao.editProfilePicture(email,ImageName);
                         
 			out.flush();
 			out.close();
@@ -312,6 +314,118 @@ public class ElmoezServices {
             ex.printStackTrace();
         }
         return "{\"state\":\""+removeImageState+"\"}";
+
+	}
+        /**
+     * mohammed ayad and shreen ibrahim
+     * upload feed component with image
+     */
+    
+        @POST
+	@Path("/uploadFeedComponentWithImage")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFeedComponent(@FormDataParam("file") InputStream uploadedInputStream,
+                @FormDataParam("file") FormDataContentDisposition fileDetail,
+                @FormDataParam("email") String email,
+                @FormDataParam("feed") String feed,
+                @FormDataParam("feedTime") String feedTime,
+                @FormDataParam("likeFeed") String likeFeed) {
+                System.out.println("email :"+email+" feed "+feed+" feedTime "+feedTime+" likeFeed "+likeFeed);
+                String ImageName=fileDetail.getFileName();
+                Feeds newFeed=new Feeds();
+                UserProfile existUser=UserProfileDao.getUser(email);
+                if(feed!=null){//if post with write feed
+                    newFeed.setUserProfile(existUser);
+                    newFeed.setFeed(feed);
+                    newFeed.setImage(ImageName);
+                    newFeed.setFeedTime(new Date(feedTime));
+                    newFeed.setLikeFeed(Integer.parseInt(likeFeed));
+                }else{//if post without write feed
+                    newFeed.setUserProfile(existUser);
+                    newFeed.setImage(ImageName);
+                    newFeed.setFeedTime(new Date(feedTime));
+                    newFeed.setLikeFeed(Integer.parseInt(likeFeed));
+                }
+                String path=context.getRealPath("/images");
+                
+                System.out.println(path+"\n");
+
+		String uploadedFileLocation = path+"\\"+ fileDetail.getFileName();
+                
+                
+		// save feed component
+		saveImage(uploadedInputStream, uploadedFileLocation,newFeed);
+
+		String output = "File uploaded to : " + uploadedFileLocation;
+                System.out.println("output is "+output);
+                System.out.println("image name "+ImageName);
+		return Response.status(200).entity(path).build();
+
+	}
+     /** mohammed ayad and shreen ibrahim
+     * upload feed component without image
+     */
+    
+        @POST
+	@Path("/uploadFeedComponentWithoutImage")
+	@Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+	public String uploadFeedComponentWithoutImage(String userFeed) {
+            JSONObject feedJson;
+            boolean uploadFeedState=false;
+        try {
+            feedJson = new JSONObject(userFeed);
+            String email=(String) feedJson.get("email");
+            String feed=(String) feedJson.get("feed");
+            String feedTime=(String) feedJson.get("feedTime");
+            String likeFeed=(String) feedJson.get("likeFeed");
+            System.out.println("email :"+email+" feed "+feed+" feedTime "+feedTime+" likeFeed "+likeFeed);
+            UserProfile user=UserProfileDao.getUser(email);
+            System.out.println("user "+user.getUserId());
+            Feeds newFeed=new Feeds();
+            newFeed.setUserProfile(user);
+            newFeed.setFeed(feed);
+            newFeed.setFeedTime(new Date(feedTime));
+            newFeed.setLikeFeed(Integer.parseInt(likeFeed));
+            uploadFeedState=FeedsDao.addNewFeed(newFeed);
+        } catch (JSONException ex) {
+            Logger.getLogger(ElmoezServices.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            if(uploadFeedState){
+                return "{\"state\":\"posted successfully\"}";
+            }else{
+                return "{\"state\":\"posted failed\"}";
+            }
+
+		
+
+	}
+        /**
+         * ayad
+         * save image and call insert method
+         */
+        // save uploaded file to new location
+	private void saveImage(InputStream uploadedInputStream,String uploadedFileLocation,Feeds newFeed) {
+
+		try {
+			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+                        
+//                              save feed component after saving image  
+                                FeedsDao.addNewFeed(newFeed);
+                        
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
 
 	}
 
