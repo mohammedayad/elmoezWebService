@@ -11,7 +11,7 @@ import model.pojos.UserProfile;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.HibernateException;
-import model.dataBaseConnection.ProfileConnection;
+
 
 /**
  *
@@ -91,7 +91,7 @@ public class UserProfileDao {
      */
     
     public static boolean editUserName(String email, String firstName, String lastName) {
-        Session session = ProfileConnection.getSession();
+        Session session = DBConnection.getSession();
         String hql = "update UserProfile set firstName = :firstName , lastName = :lastName WHERE email = :email ";
         Query query = session.createQuery(hql);
         query.setParameter("firstName", firstName);
@@ -112,7 +112,7 @@ public class UserProfileDao {
      */
 
     public static boolean editPassword(String email, String password) {
-        Session session = ProfileConnection.getSession();
+        Session session = DBConnection.getSession();
 
         String hql = "update UserProfile set password = :password WHERE email = :email ";
         Query query = session.createQuery(hql);
@@ -133,7 +133,7 @@ public class UserProfileDao {
      */
 
     public static boolean editProfilePicture(String email) {
-        Session session = ProfileConnection.getSession();
+        Session session = DBConnection.getSession();
 
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
@@ -149,7 +149,7 @@ public class UserProfileDao {
 
     public static boolean removeImage(String email) {
 
-        Session session = ProfileConnection.getSession();
+        Session session = DBConnection.getSession();
 
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
