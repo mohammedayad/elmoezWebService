@@ -27,10 +27,22 @@ public class FeedsDao {
     public static List<Feeds> getAllFeeds(){
         Session session=DBConnection.getSession();
         session.beginTransaction();
-        Query hqlquery = session.createQuery("from Feeds");
+        Query hqlquery = session.createQuery("from Feeds ORDER BY feedsId DESC");
         List<Feeds> result = (List<Feeds>)hqlquery.list();
         session.getTransaction().commit();
         System.out.println(result);
         return result;
     }
+    /**
+     * ayad
+     * method that add new feed without image
+     */
+     public static boolean addNewFeed(Feeds newFeed){
+        Session session = DBConnection.getSession();
+        session.beginTransaction();
+        session.persist(newFeed);
+        session.getTransaction().commit();
+        return true;
+    }
+     
 }

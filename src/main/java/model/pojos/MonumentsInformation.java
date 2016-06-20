@@ -1,6 +1,9 @@
 package model.pojos;
 // Generated 31-May-2016 22:35:14 by Hibernate Tools 4.3.1
 
+import org.codehaus.jettison.json.JSONObject;
+
+
 
 
 /**
@@ -46,6 +49,19 @@ public class MonumentsInformation  implements java.io.Serializable {
 
 
 
+     @Override
+    public String toString() {
+        try {
+            
+            return new JSONObject()
+                    .put("pieceInformation", pieceInformation)
+                    .toString();
+        } catch (Exception e) {
+            return null;
+        }
+
+
+}
 
 }
 

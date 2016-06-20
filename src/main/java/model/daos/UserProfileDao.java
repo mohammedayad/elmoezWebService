@@ -132,12 +132,12 @@ public class UserProfileDao {
      * func to edit profile picture
      */
 
-    public static boolean editProfilePicture(String email) {
-        Session session = DBConnection.getSession();
 
+    public static boolean editProfilePicture(String email,String ImageName) {
+        Session session = DBConnection.getSession();
         String hql = "update UserProfile set userImage = :profilePicture WHERE email = :email ";
         Query query = session.createQuery(hql);
-        query.setParameter("profilePicture", email);
+        query.setParameter("profilePicture", ImageName);
         query.setParameter("email", email);
         int executeUpdate = query.executeUpdate();
         session.beginTransaction();
@@ -163,6 +163,22 @@ public class UserProfileDao {
 
 
     }
+    public static UserProfile getUser(String email) {
+
+        Session session = DBConnection.getSession();
+
+        String hql = "from UserProfile WHERE email = :email ";
+        Query query = session.createQuery(hql);
+        query.setParameter("email", email);
+        UserProfile user = (UserProfile)query.uniqueResult();
+        session.beginTransaction();
+        session.getTransaction().commit();
+
+        return user;
+
+
+    }
+    
 
 
     

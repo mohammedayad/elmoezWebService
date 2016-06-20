@@ -12,10 +12,10 @@
             <column name="user_id" not-null="true" />
         </many-to-one>
         <property name="feed" type="string">
-            <column name="feed" length="500" not-null="true" />
+            <column name="feed" length="500" not-null="false" />
         </property>
         <property name="image" type="string">
-            <column name="image" length="50" not-null="true" />
+            <column name="image" length="50" not-null="false" />
         </property>
         <property name="feedTime" type="timestamp">
             <column name="feed_time" length="19" not-null="true" />
