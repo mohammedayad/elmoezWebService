@@ -315,6 +315,21 @@ public class ElmoezServices {
 
 	}
 
+        /**
+     * Christina Dawoud
+     * remove profile picture
+     */
+    
+        @POST
+	@Path("/getData")
+	@Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+	public String getDataFromDB(String id) {
+            boolean returnData=false;
+      
+        return "{\"state\":\""+returnData+"\"}";
+
+	}
 
 
 }
